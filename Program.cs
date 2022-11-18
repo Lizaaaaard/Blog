@@ -1,15 +1,12 @@
 using Blog.Data;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
+//using Microsoft.AspNet.Identity;
+//using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Blog
 {
@@ -46,7 +43,7 @@ namespace Blog
                     };
                     var result = userMgr.CreateAsync(adminUser, "password").GetAwaiter().GetResult();
                     //add role to user
-                    userMgr.AddToRoleAsync(adminUser.UserName, adminRole.Name).GetAwaiter().GetResult();
+                    userMgr.AddToRoleAsync(adminUser, adminRole.Name).GetAwaiter().GetResult();
                 }
             }
             catch(Exception e) 
