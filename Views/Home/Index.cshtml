@@ -5,20 +5,23 @@
 
 }
 
-<h2>Home page</h2>
+@*<h2>Home page</h2>
 
-<img src="~/content/static/476082.jpg" width="500" />
+<img src="~/content/static/476082.jpg" width="500" />*@
 
-<div>
-    <ul>
-        @foreach(var post in Model)
-            {
-        <li>
-            <a asp-controller="Home" asp-action="Post" asp-route-id="@post.Id">
-                @post.Title
-            </a>
+<div class="main_image">
+    <span class="title">Person's Blog site</span>
+</div>
 
-        </li>
-            }
-    </ul>
+<div class="container">
+
+    @foreach (var post in Model)
+    {
+        var image_path = $"/image/{post.Image}";
+         <a  class="post" asp-controller="Home" asp-action="Post" asp-route-id="@post.Id">
+              <img src="@image_path"/>
+              <span class="title">@post.Title</span>
+         </a>
+    }
+
 </div>
