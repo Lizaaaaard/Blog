@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using PhotoSauce.MagicScaler;
 
 namespace Blog.Data.FileManager
 {
@@ -18,7 +19,19 @@ namespace Blog.Data.FileManager
         {
             return new FileStream(Path.Combine(_imagePath, image), FileMode.Open,FileAccess.Read);
         }
-
+        bool IFileManager.RemoveImage(string image)
+        {
+            try {
+                var file = Path.Combine(_imagePath, image);
+                if(File.Exists(file))
+                    File.Delete(file);
+                return true;
+            }
+            catch(Exception e) {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
         public async Task<string> SaveImage(IFormFile image)
         {
             try
@@ -35,8 +48,9 @@ namespace Blog.Data.FileManager
                 using (var fileStream = new FileStream(Path.Combine(save_path, fileName), FileMode.Create))
                 {
                     await image.CopyToAsync(fileStream);
-                }
+                   // MagicImageProcessor.ProcessImage(image.OpenReadStream(), fileStream, ImageOptions());
 
+                }
                 return fileName;
             }
             catch (Exception e)
@@ -47,5 +61,16 @@ namespace Blog.Data.FileManager
             }
             
         }
+        //private ProcessImageSettings ImageOptions() => new ProcessImageSettings()
+        //{
+        //    Width = 800,
+        //    Height = 500,
+        //    ResizeMode = CropScaleMode.Crop,
+
+        //    SaveFormat = FileFormat.Jpeg,
+        //    JpegQuality = 100,
+        //    JpegSubsamleMode = ChromaSubsampleMode.Subsample420,
+
+        //};
     }
 }
