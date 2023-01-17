@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using PhotoSauce.MagicScaler;
 
 namespace Blog.Data.FileManager
 {
@@ -48,8 +47,6 @@ namespace Blog.Data.FileManager
                 using (var fileStream = new FileStream(Path.Combine(save_path, fileName), FileMode.Create))
                 {
                     await image.CopyToAsync(fileStream);
-                   // MagicImageProcessor.ProcessImage(image.OpenReadStream(), fileStream, ImageOptions());
-
                 }
                 return fileName;
             }
@@ -61,16 +58,5 @@ namespace Blog.Data.FileManager
             }
             
         }
-        //private ProcessImageSettings ImageOptions() => new ProcessImageSettings()
-        //{
-        //    Width = 800,
-        //    Height = 500,
-        //    ResizeMode = CropScaleMode.Crop,
-
-        //    SaveFormat = FileFormat.Jpeg,
-        //    JpegQuality = 100,
-        //    JpegSubsamleMode = ChromaSubsampleMode.Subsample420,
-
-        //};
     }
 }
