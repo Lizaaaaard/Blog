@@ -1,4 +1,7 @@
 ﻿using Blog.Models;
+using Blog.Models.Comments;
+//using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,14 +27,17 @@ namespace Blog.Data.Repository
         }
         public List<Post> GetAllPosts(string category)
         {
-            Func<Post, bool> InCategory = (post) => {return post.Category.ToLower().Equals(category.ToLower());};
+            Func<Post, bool> InCategory = (post) => { return post.Category.ToLower().Equals(category.ToLower()); };
             return _ctx.Posts
                 .Where(post => InCategory(post))
                 .ToList();
         }
         public Post GetPost(int id)
         {
-            return _ctx.Posts.FirstOrDefault(p => p.Id == id);
+            return _ctx.Posts
+                .Include(p => p.MainComments)
+                .ThenInclude(mc => mc.SubComments)
+                .FirstOrDefault(p => p.Id == id);
         }
 
         public void RemovePost(int id)
@@ -52,6 +58,9 @@ namespace Blog.Data.Repository
                 return false;
         }
 
-        
+        void IRepository.AddSubComment(SubComment comment)
+        {
+            _ctx.SubComments.Add(comment);
+        }
     }
 }

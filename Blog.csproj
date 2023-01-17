@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Home\_MainComment.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Entityframework" Version="6.4.4" />
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.3" />
     <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.3" />
@@ -29,6 +33,10 @@
   <ItemGroup>
     <Folder Include="wwwroot\content\blog\" />
     <Folder Include="wwwroot\lib\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Home\_MainComment.cshtml" />
   </ItemGroup>
 
 </Project>
