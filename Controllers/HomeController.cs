@@ -1,11 +1,10 @@
 ﻿using Blog.Data.FileManager;
 using Blog.Data.Repository;
-using Blog.Models.Comments;
-using Blog.ViewModels;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Blog.Controllers
 {
@@ -13,14 +12,17 @@ namespace Blog.Controllers
     {
         private IRepository _repo;
         private IFileManager _fileManager;
-        public HomeController(IRepository repo, IFileManager fileManager)
+        private readonly IStringLocalizer<HomeController> _localizer;
+        public HomeController(IRepository repo, IFileManager fileManager, IStringLocalizer<HomeController> localizer)
         {
             _repo = repo;
             _fileManager = fileManager;
+            _localizer = localizer;
         }
         public IActionResult Index(string category)
         {
             var posts = string.IsNullOrEmpty(category) ? _repo.GetAllPosts() : _repo.GetAllPosts(category);
+            ViewData["Title"] = _localizer["Header"];
             return View(posts);
         }
 
@@ -37,38 +39,17 @@ namespace Blog.Controllers
             var mime = image.Substring(image.LastIndexOf(".") + 1);
             return new FileStreamResult(_fileManager.ImageStream(image), $"image/{mime}");
         }
+
         [HttpPost]
-        public async Task<IActionResult> Comment(CommentViewModel vm)
+        public IActionResult SetLanguage(string culture, string returnUrl)
         {
-            if (!ModelState.IsValid)
-                return RedirectToAction("Post", new { id = vm.PostId });
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
 
-            var post = _repo.GetPost(vm.PostId);
-            if (vm.MainCommentId > 0)
-            {
-                post.MainComments = post.MainComments ?? new List<MainComment>();
-
-                post.MainComments.Add(new MainComment
-                {
-                    Message = vm.Message,
-                    Created = DateTime.Now
-                });
-                _repo.UpdatePost(post);
-            }
-            else
-            {
-                var comment = new SubComment
-                {
-                    MainCommentId = vm.MainCommentId,
-                    Message = vm.Message,
-                    Created = DateTime.Now
-                };
-                _repo.AddSubComment(comment);
-            }
-
-            await _repo.SaveChangesAsync();
-
-            return RedirectToAction("Post", new { id = vm.PostId });
+            return LocalRedirect(returnUrl);
         }
     }
 }

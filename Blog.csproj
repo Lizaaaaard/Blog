@@ -6,11 +6,31 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Comments\**" />
+    <Compile Remove="Новая папка1\**" />
+    <Compile Remove="Новая папка\**" />
+    <Content Remove="Models\Comments\**" />
+    <Content Remove="Новая папка1\**" />
+    <Content Remove="Новая папка\**" />
+    <EmbeddedResource Remove="Models\Comments\**" />
+    <EmbeddedResource Remove="Новая папка1\**" />
+    <EmbeddedResource Remove="Новая папка\**" />
+    <None Remove="Models\Comments\**" />
+    <None Remove="Новая папка1\**" />
+    <None Remove="Новая папка\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="ViewModels\CommentViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Views\Home\_MainComment.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Entityframework" Version="6.4.4" />
+    <PackageReference Include="Localization.AspNetCore.TagHelpers" Version="0.6.0" />
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.3" />
     <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
@@ -33,10 +53,6 @@
   <ItemGroup>
     <Folder Include="wwwroot\content\blog\" />
     <Folder Include="wwwroot\lib\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Home\_MainComment.cshtml" />
   </ItemGroup>
 
 </Project>

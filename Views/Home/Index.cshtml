@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<Post>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @{ 
     ViewBag.Title = "Blog website";
@@ -12,7 +14,7 @@
 <img src="~/content/static/476082.jpg" width="500" />*@
 
 <div class="main_image">
-    <span class="title">Person's Blog site</span>
+    <span class="title">@Localizer["Header"]</span>
 </div>
 
 <div class="container">

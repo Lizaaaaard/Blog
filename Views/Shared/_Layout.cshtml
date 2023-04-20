@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -12,25 +14,25 @@
 <body>
     <div>
         <nav>
-            <a asp-controller="Home" asp-action="Index">Home</a>
-            <a asp-controller="Home" asp-action="Index" asp-route-category="Travel">Travel</a>
-            <a asp-controller="Panel" asp-action="Index">Admin Panel</a>
+            <a asp-controller="Home" asp-action="Index">@Localizer["Home"]</a>
+            <a asp-controller="Home" asp-action="Index" asp-route-category="Travel">@Localizer["Travel"]</a>
+            <a asp-controller="Panel" asp-action="Index">@Localizer["Admin"]</a>
 
             @if (User.Identity.IsAuthenticated)
             {
                 //<a asp-controller="Home" asp-action="Edit">Create post</a>
-                <a asp-controller="Auth" asp-action="Logout">Logout</a>
+                    <a asp-controller="Auth" asp-action="Logout">@Localizer["Logout"]</a>
             }
             else
             {
-                <a asp-controller="Auth" asp-action="Login">Sign In</a>
+                    <a asp-controller="Auth" asp-action="Login">@Localizer["SignIn"]</a>
             }
-
         </nav>
     </div>
-    <div>
-        @RenderBody()
+    <div class="setLanguage">
+        @await Html.PartialAsync("_SelectLanguagePartial")
     </div>
+    @RenderBody()
     @RenderSection("scripts", false)
 </body>
 </html>

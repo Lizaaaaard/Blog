@@ -1,13 +1,15 @@
 ﻿@model IEnumerable<Post>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @{
 
 
 }
 
-<h2>Admin Panel</h2>
+<h2>@Localizer["PanelTitle"]</h2>
 <a asp-controller="Panel" asp-action="Edit">
-    Add new post
+    @Localizer["NewPost"]
 </a>
 
 <div>
@@ -18,11 +20,11 @@
                     @post.Title
                 -
                 <a asp-controller="Panel" asp-action="Edit" asp-route-id="@post.Id">
-                    Edit
+                    @Localizer["Edit"]
                 </a>
                 -
                 <a asp-controller="Panel" asp-action="Remove" asp-route-id="@post.Id">
-                    Remove
+                    @Localizer["Remove"]
                 </a>
             </li>
         }

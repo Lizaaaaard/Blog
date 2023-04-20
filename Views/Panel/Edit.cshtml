@@ -1,4 +1,6 @@
 ﻿@model PostViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @{
 
@@ -8,35 +10,35 @@
     <form asp-controller="Panel" asp-action="Edit" method="post" enctype="multipart/form-data">
         <input asp-for="Id" type="hidden" />
         <div>
-            <label>Title</label>
+            <label>@Localizer["Title"]</label>
             <input asp-for="Title" />
         </div>
         <div>
-            <label>Description</label>
+            <label>@Localizer["Description"]</label>
             <input asp-for="Description" />
         </div>
         <div>
-            <label>Tags</label>
+            <label>@Localizer["Tags"]</label>
             <input asp-for="Tags" />
         </div>
         <div>
-            <label>Category</label>
+            <label>@Localizer["Category"]</label>
             <select asp-for="Category">
-                <option value="Travel">Travel</option>
-                <option value="Programming">Programming</option>
-                <option value="Photography">Photography</option>
+                <option value="Travel">@Localizer["Travel"]</option>
+                <option value="Programming">@Localizer["Programming"]</option>
+                <option value="Photography">@Localizer["Photography"]</option>
             </select>
         </div>
         <div>
-            <label>Body</label>
+            <label>@Localizer["Body"]</label>
             <textarea id="editor" asp-for="Body"></textarea>
         </div>
         <div>
-            <label>Image</label>
+            <label>@Localizer["Image"]</label>
             <input asp-for="CurrentImage" type="hidden" />
             <input asp-for="Image" />
         </div>
-        <input type="submit" value="Submit" />
+        <input type="submit" value="@Localizer["Submit"]" />
     </form>
 </div>
 
@@ -45,9 +47,5 @@
     <script src="~/lib/Trumbowyg-main/dist/trumbowyg.min.js"></script>
     <script>
         $('#editor').trumbowyg();
-
-                    // . - class
-                    //# - id
-                    //nav - html element
     </script>
 }

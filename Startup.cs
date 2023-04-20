@@ -1,14 +1,15 @@
 using Blog.Data;
+using Blog.Data.FileManager;
+using Blog.Data.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Blog.Data.Repository;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Blog.Data.FileManager;
+using System.Globalization;
 
 namespace Blog
 {
@@ -19,11 +20,11 @@ namespace Blog
         {
             _config = config;
         }
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(_config.GetConnectionString("DefaultConnections")));
-        
+
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -31,7 +32,6 @@ namespace Blog
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
             })
-               // .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
             services.ConfigureApplicationCookie(options =>
@@ -45,15 +45,29 @@ namespace Blog
             services.AddRazorPages();
 
             services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddControllersWithViews().AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix, options =>
+        options.ResourcesPath = "Resources");
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                      new CultureInfo("en"),
+                      new CultureInfo("ru")
+                };
+
+                options.DefaultRequestCulture = new RequestCulture("en");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
-               // app.UseDeveloperExceptionPage();
+                // app.UseDeveloperExceptionPage();
             }
 
             app.UseDeveloperExceptionPage();
@@ -62,16 +76,15 @@ namespace Blog
 
             app.UseHttpsRedirection();
 
+            app.UseRequestLocalization();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseRouting();
 
             app.UseMvcWithDefaultRoute();
-            
 
-            
-          //  app.UseMvc();
         }
     }
 }
